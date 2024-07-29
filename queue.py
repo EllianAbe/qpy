@@ -1,5 +1,4 @@
 from abc import abstractmethod, ABCMeta
-from item import AbstractQueueItem
 
 
 class AbstractQueue(metaclass=ABCMeta):

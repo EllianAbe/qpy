@@ -11,8 +11,12 @@ class AbstractQueue(metaclass=ABCMeta):
 
     @abstractmethod
     def add(self, item: AbstractQueueItem):
-        # add an item to the queue
+        # add an item to the queues
         pass
+
+    @abstractmethod
+    def enqueue_item(self, item: AbstractQueueItem):
+        item.enqueue(self)
 
     @abstractmethod
     def get_next(self) -> AbstractQueueItem:

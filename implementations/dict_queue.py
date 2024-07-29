@@ -8,7 +8,11 @@ class DictQueue(AbstractQueue):
         self.data = data
 
     def add(self, item: AbstractQueueItem):
+        self.enqueue_item(item)
         self.data.append(item)
+
+    def enqueue_item(self, item: AbstractQueueItem):
+        return super().enqueue_item(item)
 
     def get_next(self) -> AbstractQueueItem:
 
@@ -61,6 +65,9 @@ class Item(AbstractQueueItem):
     @status.setter
     def status(self, value: Literal['pending', 'processing', 'success', 'error']):
         self._status = value
+
+    def enqueue(self, queue):
+        super().enqueue(queue)
 
     def validate_data(self, data_definition):
         pass

@@ -31,6 +31,13 @@ class TestDictQueue(unittest.TestCase):
 
         self.assertTrue(in_queue, 'item should be in the queue')
 
+    def test_enqueue_methods(self):
+        works_fine = all(
+            item.queue == self.queue for item in self.queue.get_items())
+
+        self.assertTrue(
+            works_fine, 'all queue references must refer to the queue')
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

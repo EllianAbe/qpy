@@ -44,4 +44,13 @@ class AbstractQueue(metaclass=ABCMeta):
     def validate_item(self, item) -> bool:
         # validate an item
         pass
- # type: ignore
+
+    def dispatcher(self):
+        def wrapper(func, *args, **kwargs):
+            item = func(*args, **kwargs)
+
+            self.add(item)
+
+            return item
+
+        return wrapper

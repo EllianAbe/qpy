@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABCMeta
-from item import AbstractQueueItem
+from abstractions.item import AbstractQueueItem
 
 
 class AbstractQueue(metaclass=ABCMeta):
@@ -11,8 +11,12 @@ class AbstractQueue(metaclass=ABCMeta):
 
     @abstractmethod
     def add(self, item: AbstractQueueItem):
-        # add an item to the queue
+        # add an item to the queues
         pass
+
+    @abstractmethod
+    def enqueue_item(self, item: AbstractQueueItem):
+        item.enqueue(self)
 
     @abstractmethod
     def get_next(self) -> AbstractQueueItem:
@@ -45,8 +49,8 @@ class AbstractQueue(metaclass=ABCMeta):
         # validate an item
         pass
 
-    def dispatcher(self):
-        def wrapper(func, *args, **kwargs):
+    def dispatcher(self, func):
+        def wrapper(*args, **kwargs):
             item = func(*args, **kwargs)
 
             self.add(item)

@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABCMeta
+from item import AbstractQueueItem
 
 
 class AbstractQueue(metaclass=ABCMeta):
@@ -43,3 +44,4 @@ class AbstractQueue(metaclass=ABCMeta):
     def validate_item(self, item) -> bool:
         # validate an item
         pass
+ # type: ignore

@@ -1,6 +1,5 @@
-from typing import Any, Sequence, Literal
 from abstractions import AbstractQueue, AbstractQueueItem
-from datetime import datetime
+from typing import Sequence
 
 
 class DictQueue(AbstractQueue):
@@ -46,31 +45,3 @@ class DictQueue(AbstractQueue):
 
     def __str__(self) -> str:
         return '\n'.join(f'{index} {str(item)}' for index, item in enumerate(self.data, 1))
-
-
-class Item(AbstractQueueItem):
-    def __init__(self, data: dict, output_data: dict = None,
-                 status: Literal['pending', 'processing',
-                                 'success', 'error'] = 'pending',
-                 creation_date: datetime = datetime.now()):
-        self.data = data
-        self._status = status
-        self.output_data = output_data
-        self.creation_date = creation_date
-
-    @property
-    def status(self):
-        return self._status
-
-    @status.setter
-    def status(self, value: Literal['pending', 'processing', 'success', 'error']):
-        self._status = value
-
-    def enqueue(self, queue):
-        super().enqueue(queue)
-
-    def validate_data(self, data_definition):
-        pass
-
-    def __str__(self) -> str:
-        return f'Item: {self.data}, Status: {self.status}, creation_date: {self.creation_date}'

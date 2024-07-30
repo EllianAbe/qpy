@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qpy"
+version = "1.0.0"
+description = "Abstract queue implementation in Python, providing a common interface for queue implementations. We focus on how, you decide where and how to store your data."
+authors = [{ name = "Ellian Abe", email = "ellian_abe@outlook.com" }]
+license = "MIT"
+dependencies = ["requests", "numpy"]
+
+
+[project.optional-dependencies]
+dict_queues = []
+another_implementation = [
+    # Dependencies for another implementation
+    "dependency_for_another_implementation",
+]

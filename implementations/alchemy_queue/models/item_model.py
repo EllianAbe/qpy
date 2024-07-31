@@ -1,9 +1,6 @@
-from ..utils import named_instance
+from ..base import Base
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, JSON, ForeignKey, DateTime, Enum
-
-
-Base = named_instance.get('Base', declarative_base())
 
 
 class ItemStatus(Enum):

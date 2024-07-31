@@ -1,10 +1,7 @@
-from ..utils import named_instance
+from ..base import Base
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-
-
-Base = named_instance.get('Base', declarative_base())
 
 
 class QueueModel(Base):

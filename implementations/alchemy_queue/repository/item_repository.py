@@ -1,4 +1,5 @@
-from models import ItemModel
+from ..models import ItemModel
+from ..models.item_model import ItemStatus
 
 
 class ItemRepository():
@@ -11,11 +12,28 @@ class ItemRepository():
         self.session.commit()
 
     def remove(self, item: ItemModel):
+        item.status = ItemStatus.REMOVED
+        self.session.commit()
+
+    def hard_remove(self, item: ItemModel):
         self.session.delete(item)
         self.session.commit()
 
-    def update(self, item: ItemModel):
+    def update(self):
         self.session.commit()
 
     def get_all(self):
         return self.session.query(ItemModel)
+
+    def get_next_by_queue(self, queue):
+        item = self.session.query(ItemModel).filter_by(
+            queue_id=queue.id, status=ItemStatus.PENDING).first()
+
+        if item:
+            item.status = ItemStatus.PROCESSING
+            self.session.commit()
+
+        return item
+
+    def has_pending_items(self, queue):
+        return self.session.query(ItemModel).filter_by(queue_id=queue.id, status=ItemStatus.PENDING).first()

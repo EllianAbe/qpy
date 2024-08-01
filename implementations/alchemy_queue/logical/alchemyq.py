@@ -22,14 +22,21 @@ class AlchemyQueue(AbstractQueue):
         item = ItemModel(data=data, queue_id=self.queue.id)
         self._item_repository.add(item)
 
+        return item
+
     def enqueue_item(self, item):
         raise NotImplementedError()
 
     def get_next(self):
         return self._item_repository.get_next_by_queue(self.queue)
 
-    def get_items(self) -> list:
-        return self._queue_repository.get_items(self.name)
+    def get_items(self, **filters) -> list:
+        if not filters:
+            filters = {}
+
+        filters['queue_id'] = self.queue.id
+
+        return self._item_repository.get_items_by_filters(filters)
 
     def is_empty(self) -> bool:
         return not self.get_items()
@@ -53,7 +60,7 @@ class AlchemyQueue(AbstractQueue):
         if item.retry_count > self.queue.max_retry_count:
             item.status = ItemStatus.ERROR
 
-        self._item_repository.update(item)
+        self._item_repository.update()
 
     def dispatcher(self, func):
         pass

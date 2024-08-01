@@ -19,6 +19,3 @@ class QueueRepository:
 
     def update(self):
         self.session.commit()
-
-    def get_items(self, name):
-        return self.session.query(QueueModel).filter_by(name=name).first().items

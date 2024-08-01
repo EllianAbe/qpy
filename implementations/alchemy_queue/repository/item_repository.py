@@ -25,6 +25,9 @@ class ItemRepository():
     def get_all(self):
         return self.session.query(ItemModel)
 
+    def get_items_by_filters(self, filters):
+        return self.session.query(ItemModel).filter_by(**filters).all()
+
     def get_next_by_queue(self, queue):
         item = self.session.query(ItemModel).filter_by(
             queue_id=queue.id, status=ItemStatus.PENDING).first()

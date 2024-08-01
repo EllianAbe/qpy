@@ -9,3 +9,4 @@ class QueueModel(Base):
     name = Column(String)
     items = relationship('ItemModel', back_populates='queue',
                          cascade='all, delete-orphan')
+    max_retry_count = Column(Integer, default=3)

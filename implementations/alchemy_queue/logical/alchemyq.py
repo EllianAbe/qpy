@@ -2,6 +2,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from abstractions import AbstractQueue
 from implementations.alchemy_queue.models import QueueModel, ItemModel
+from implementations.alchemy_queue.models.item_model import ItemStatus
 from ..repository import QueueRepository, ItemRepository
 
 
@@ -41,6 +42,17 @@ class AlchemyQueue(AbstractQueue):
 
     def update_item(self, item, status):
         item.status = status
+
+        if item.status == ItemStatus.ERROR:
+            item.retry_count += 1
+            item.status = \
+                ItemStatus.PENDING \
+                if item.retry_count < self.queue.max_retry_count \
+                else ItemStatus.ERROR
+
+        if item.retry_count > self.queue.max_retry_count:
+            item.status = ItemStatus.ERROR
+
         self._item_repository.update(item)
 
     def dispatcher(self, func):

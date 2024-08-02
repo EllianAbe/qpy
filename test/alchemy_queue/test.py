@@ -25,7 +25,7 @@ class TestAlchemyQueue(unittest.TestCase):
     def test_add(self):
         item = self.queue.add({'a': 1, 'b': 2})
 
-        self.assertEqual(self.queue.queue.id, item.queue_id)
+        self.assertIn(item, self.queue.get_items())
 
     def test_get_next(self):
         item = self.queue.get_next()
@@ -63,6 +63,15 @@ class TestAlchemyQueue(unittest.TestCase):
         sucess_after = len(self.queue.get_items(status=ItemStatus.SUCCESS))
 
         self.assertGreater(sucess_after, sucess_before)
+
+    def test_with_decorator(self):
+        @self.queue.dispatcher
+        def new_item():
+            return {'a': 1, 'b': 2}
+
+        item = new_item()
+
+        self.assertIn(item, self.queue.get_items())
 
 
 if __name__ == '__main__':

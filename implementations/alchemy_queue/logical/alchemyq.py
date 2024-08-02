@@ -1,5 +1,3 @@
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 from abstractions import AbstractQueue
 from implementations.alchemy_queue.models import QueueModel, ItemModel
 from implementations.alchemy_queue.models.item_model import ItemStatus
@@ -63,4 +61,11 @@ class AlchemyQueue(AbstractQueue):
         self._item_repository.update()
 
     def dispatcher(self, func):
-        pass
+        def wrapper(*args, **kwargs):
+            data = func(*args, **kwargs)
+
+            item = self.add(data)
+
+            return item
+
+        return wrapper

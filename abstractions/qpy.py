@@ -10,7 +10,7 @@ class AbstractQueue(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def add(self, item: AbstractQueueItem):
+    def add(self, item: dict) -> AbstractQueueItem:
         # add an item to the queues
         pass
 

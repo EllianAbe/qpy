@@ -39,4 +39,4 @@ class ItemRepository():
         return item
 
     def has_pending_items(self, queue):
-        return self.session.query(ItemModel).filter_by(queue_id=queue.id, status=ItemStatus.PENDING).first()
+        return self.session.query(ItemModel).filter_by(queue_id=queue.id, status=ItemStatus.PENDING).first() is not None

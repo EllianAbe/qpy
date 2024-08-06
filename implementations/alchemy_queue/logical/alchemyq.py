@@ -28,7 +28,7 @@ class AlchemyQueue(AbstractQueue):
     def get_next(self):
         return self._item_repository.get_next_by_queue(self.queue)
 
-    def get_items(self, **filters) -> list:
+    def get_items(self, **filters) -> list[ItemModel]:
         if not filters:
             filters = {}
 

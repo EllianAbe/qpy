@@ -1,3 +1,4 @@
+from typing import Any
 from ..models import ItemModel
 from ..models.item_model import ItemStatus
 
@@ -37,6 +38,9 @@ class ItemRepository():
             self.session.commit()
 
         return item
+
+    def get_item_by_id(self, item_id):
+        return self.session.query(ItemModel).filter_by(id=item_id).first()
 
     def has_pending_items(self, queue):
         return self.session.query(ItemModel).filter_by(queue_id=queue.id, status=ItemStatus.PENDING).first() is not None

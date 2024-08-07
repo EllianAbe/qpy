@@ -64,9 +64,9 @@ async def get_queue():
     }
 
 
-# @app.post("/items/update", response_model=bool)
-# async def update_item(item: ItemModel, status: str):
-#     app.queue.update_item(item, status)
+@app.post("/items/update", response_model=bool)
+async def update_item(item: ItemModel, status: str):
+    app.queue.update_item(item, status)
 
 
 # @app.delete("/items/remove")

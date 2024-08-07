@@ -13,6 +13,7 @@ class ItemStatus(str, Enum):
 
 class ItemModel(BaseModel):
     id: int
+    queue_id: int
     creation_datetime: datetime
     status: ItemStatus
     retry_count: int

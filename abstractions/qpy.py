@@ -31,6 +31,11 @@ class AbstractQueue(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def get_item_by_id(self, item_id) -> AbstractQueueItem:
+        # get an item from the queue by id
+        pass
+
+    @abstractmethod
     def is_empty(self) -> bool:
         # check if the queue is empty
         pass

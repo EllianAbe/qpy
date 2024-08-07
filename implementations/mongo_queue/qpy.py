@@ -37,6 +37,14 @@ class MongoQueue(AbstractQueue):
 
         return item
 
+    def get_item_by_id(self, item_id):
+        item = self._collection.find_one({'_id': item_id})
+
+        if not item:
+            return None
+
+        return MongoQueueItem.from_dict(item)
+
     def get_items(self, filters={}) -> Sequence[MongoQueueItem]:
         if 'id' in filters:
             filters['_id'] = filters.pop('id')

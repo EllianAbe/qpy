@@ -1,5 +1,6 @@
 from abc import abstractmethod, ABCMeta
 from abstractions.item import AbstractQueueItem
+from abstractions.item_status import ItemStatus
 
 
 class AbstractQueue(metaclass=ABCMeta):
@@ -41,9 +42,27 @@ class AbstractQueue(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def update_item(self, item, status):
+    def update_item(self, item_id, status, output_data):
+        item = self.get_item_by_id(item_id)
+
+        item.status = status
+
+        if output_data:
+            item.output_data = output_data
+
+        if item.status == ItemStatus.ERROR:
+            item.retry_count += 1
+            item.status = \
+                ItemStatus.PENDING \
+                if item.retry_count < self.queue.max_retry_count \
+                else ItemStatus.ERROR
+
+        if self.queue.max_retry_count == 0 or item.retry_count > self.queue.max_retry_count:
+            item.status = ItemStatus.ERROR
+
+        return item
+
         # update an item in the queue
-        pass
 
     @abstractmethod
     def remove_item(self):

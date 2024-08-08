@@ -48,18 +48,8 @@ class AlchemyQueue(AbstractQueue):
     def remove_item(self, item):
         self._item_repository.remove(item)
 
-    def update_item(self, item, status):
-        item.status = status
-
-        if item.status == ItemStatus.ERROR:
-            item.retry_count += 1
-            item.status = \
-                ItemStatus.PENDING \
-                if item.retry_count < self.queue.max_retry_count \
-                else ItemStatus.ERROR
-
-        if item.retry_count > self.queue.max_retry_count:
-            item.status = ItemStatus.ERROR
+    def update_item(self, item_id, status, output_data=None):
+        item = super().update_item(item_id, status, output_data)
 
         self._item_repository.update()
 

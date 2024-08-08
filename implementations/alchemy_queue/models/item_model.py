@@ -2,15 +2,7 @@ from ..base import Base
 from datetime import datetime
 from sqlalchemy import Column, Integer, JSON, ForeignKey, DateTime, Enum
 from sqlalchemy.orm import relationship
-import enum
-
-
-class ItemStatus(enum.Enum):
-    PENDING = 'pending'
-    PROCESSING = 'processing'
-    SUCCESS = 'success'
-    ERROR = 'error'
-    REMOVED = 'removed'
+from .item_status import ItemStatus
 
 
 class ItemModel(Base):

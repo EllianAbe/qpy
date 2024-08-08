@@ -61,20 +61,12 @@ class MongoQueue(AbstractQueue):
     def has_pending_items(self):
         return self._collection.find_one({'status': MongoItemStatus.PENDING}) is not None
 
-    def remove_item(self, item: AbstractQueueItem):
-        self.update_item(item, MongoItemStatus.REMOVED)
+    def remove_item(self, item_id):
+        self.update_item(item_id, MongoItemStatus.REMOVED)
 
     def update_item(self, item_id, status, output_data=None):
 
         item = super().update_item(item_id, status, output_data)
-
-        if item.status == MongoItemStatus.ERROR and self.queue.max_retry_count >= 0:
-            item.retry_count += 1
-
-            if item.retry_count < self.queue.max_retry_count:
-                item.status = MongoItemStatus.PENDING
-            else:
-                item.status = MongoItemStatus.ERROR
 
         self._collection.update_one(
             {'_id': item.id}, {'$set': item.to_dict()})

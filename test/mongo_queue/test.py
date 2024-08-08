@@ -40,7 +40,7 @@ class TestMongoQueue(unittest.TestCase):
 
         before = len(self.queue.get_items({'status': MongoItemStatus.REMOVED}))
 
-        self.queue.remove_item(self.queue.get_next())
+        self.queue.remove_item(self.queue.get_next().id)
 
         after = len(self.queue.get_items({'status': MongoItemStatus.REMOVED}))
 
@@ -51,7 +51,8 @@ class TestMongoQueue(unittest.TestCase):
 
         sucess_before = len(self.queue.get_items(
             {'status': MongoItemStatus.SUCCESS}))
-        self.queue.update_item(self.queue.get_next(), MongoItemStatus.SUCCESS)
+        self.queue.update_item(self.queue.get_next().id,
+                               MongoItemStatus.SUCCESS)
 
         sucess_after = len(self.queue.get_items(
             {'status': MongoItemStatus.SUCCESS}))

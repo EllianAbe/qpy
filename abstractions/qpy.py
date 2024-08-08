@@ -54,11 +54,11 @@ class AbstractQueue(metaclass=ABCMeta):
             item.retry_count += 1
             item.status = \
                 ItemStatus.PENDING \
-                if item.retry_count < self.queue.max_retry_count \
+                if item.retry_count < self.max_retry_count \
                 else ItemStatus.ERROR
 
-        if self.queue.max_retry_count == 0 or item.retry_count > self.queue.max_retry_count:
-            item.status = ItemStatus.ERROR
+            if self.max_retry_count == 0 or item.retry_count > self.max_retry_count:
+                item.status = ItemStatus.ERROR
 
         return item
 

@@ -1,5 +1,5 @@
 from abstractions import ItemStatus
 
 
-class MongoItemStatus(ItemStatus):
+class AlchemyItemStatus(ItemStatus):
     pass

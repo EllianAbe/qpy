@@ -1,0 +1,12 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:qpy}/example.db",
+            "name": "sqlalchemy.qpy",
+            "group": "qpy"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

@@ -6,9 +6,10 @@ from .item_status import MongoItemStatus
 
 
 class MongoQueue(AbstractQueue):
-    def __init__(self, db: Database, name):
+    def __init__(self, db: Database, name, retry_count=0):
         self._db = db
         self._collection = db.get_collection(name)
+        self.max_retry_count = retry_count
 
     def add(self, data: dict) -> MongoQueueItem:
 
@@ -37,6 +38,14 @@ class MongoQueue(AbstractQueue):
 
         return item
 
+    def get_item_by_id(self, item_id):
+        item = self._collection.find_one({'_id': item_id})
+
+        if not item:
+            return None
+
+        return MongoQueueItem.from_dict(item)
+
     def get_items(self, filters={}) -> Sequence[MongoQueueItem]:
         if 'id' in filters:
             filters['_id'] = filters.pop('id')
@@ -52,11 +61,12 @@ class MongoQueue(AbstractQueue):
     def has_pending_items(self):
         return self._collection.find_one({'status': MongoItemStatus.PENDING}) is not None
 
-    def remove_item(self, item: AbstractQueueItem):
-        self.update_item(item, MongoItemStatus.REMOVED)
+    def remove_item(self, item_id):
+        self.update_item(item_id, MongoItemStatus.REMOVED)
 
-    def update_item(self, item: MongoQueueItem, status: MongoItemStatus):
-        item.status = status
+    def update_item(self, item_id, status, output_data=None):
+
+        item = super().update_item(item_id, status, output_data)
 
         self._collection.update_one(
             {'_id': item.id}, {'$set': item.to_dict()})

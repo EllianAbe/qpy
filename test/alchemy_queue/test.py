@@ -3,7 +3,7 @@ import unittest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from implementations.alchemy_queue import AlchemyQueue, QueueRepository, ItemRepository
-from implementations.alchemy_queue.models.item_model import ItemStatus
+from implementations.alchemy_queue.models.item_model import AlchemyItemStatus
 from implementations.alchemy_queue.base import Base
 
 
@@ -46,21 +46,24 @@ class TestAlchemyQueue(unittest.TestCase):
 
     def test_remove_item(self):
 
-        before = len(self.queue.get_items(status=ItemStatus.REMOVED))
+        before = len(self.queue.get_items(status=AlchemyItemStatus.REMOVED))
 
         self.queue.remove_item(self.queue.get_next())
 
-        after = len(self.queue.get_items(status=ItemStatus.REMOVED))
+        after = len(self.queue.get_items(status=AlchemyItemStatus.REMOVED))
 
         self.assertGreater(after, before)
 
     def test_update_item(self):
         self.queue.add({'a': 1, 'b': 2})
 
-        sucess_before = len(self.queue.get_items(status=ItemStatus.SUCCESS))
-        self.queue.update_item(self.queue.get_next(), ItemStatus.SUCCESS)
+        sucess_before = len(self.queue.get_items(
+            status=AlchemyItemStatus.SUCCESS))
+        self.queue.update_item(self.queue.get_next().id,
+                               AlchemyItemStatus.SUCCESS)
 
-        sucess_after = len(self.queue.get_items(status=ItemStatus.SUCCESS))
+        sucess_after = len(self.queue.get_items(
+            status=AlchemyItemStatus.SUCCESS))
 
         self.assertGreater(sucess_after, sucess_before)
 

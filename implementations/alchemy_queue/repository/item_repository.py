@@ -1,5 +1,6 @@
+from typing import Any
 from ..models import ItemModel
-from ..models.item_model import ItemStatus
+from ..models.item_model import AlchemyItemStatus
 
 
 class ItemRepository():
@@ -12,7 +13,7 @@ class ItemRepository():
         self.session.commit()
 
     def remove(self, item: ItemModel):
-        item.status = ItemStatus.REMOVED
+        item.status = AlchemyItemStatus.REMOVED
         self.session.commit()
 
     def hard_remove(self, item: ItemModel):
@@ -30,13 +31,16 @@ class ItemRepository():
 
     def get_next_by_queue(self, queue):
         item = self.session.query(ItemModel).filter_by(
-            queue_id=queue.id, status=ItemStatus.PENDING).first()
+            queue_id=queue.id, status=AlchemyItemStatus.PENDING).first()
 
         if item:
-            item.status = ItemStatus.PROCESSING
+            item.status = AlchemyItemStatus.PROCESSING
             self.session.commit()
 
         return item
 
+    def get_item_by_id(self, item_id):
+        return self.session.query(ItemModel).filter_by(id=item_id).first()
+
     def has_pending_items(self, queue):
-        return self.session.query(ItemModel).filter_by(queue_id=queue.id, status=ItemStatus.PENDING).first() is not None
+        return self.session.query(ItemModel).filter_by(queue_id=queue.id, status=AlchemyItemStatus.PENDING).first() is not None

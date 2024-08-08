@@ -6,9 +6,10 @@ from .item_status import MongoItemStatus
 
 
 class MongoQueue(AbstractQueue):
-    def __init__(self, db: Database, name):
+    def __init__(self, db: Database, name, retry_count=0):
         self._db = db
         self._collection = db.get_collection(name)
+        self.max_retry_count = retry_count
 
     def add(self, data: dict) -> MongoQueueItem:
 
@@ -63,8 +64,17 @@ class MongoQueue(AbstractQueue):
     def remove_item(self, item: AbstractQueueItem):
         self.update_item(item, MongoItemStatus.REMOVED)
 
-    def update_item(self, item: MongoQueueItem, status: MongoItemStatus):
-        item.status = status
+    def update_item(self, item_id, status, output_data=None):
+
+        item = super().update_item(item_id, status, output_data)
+
+        if item.status == MongoItemStatus.ERROR and self.queue.max_retry_count >= 0:
+            item.retry_count += 1
+
+            if item.retry_count < self.queue.max_retry_count:
+                item.status = MongoItemStatus.PENDING
+            else:
+                item.status = MongoItemStatus.ERROR
 
         self._collection.update_one(
             {'_id': item.id}, {'$set': item.to_dict()})

@@ -2,7 +2,7 @@ from ..base import Base
 from datetime import datetime
 from sqlalchemy import Column, Integer, JSON, ForeignKey, DateTime, Enum, String
 from sqlalchemy.orm import relationship
-from .item_status import ItemStatus
+from .item_status import AlchemyItemStatus
 
 
 class ItemModel(Base):
@@ -11,7 +11,7 @@ class ItemModel(Base):
     queue_id = Column(Integer, ForeignKey('alchemy_queue.id'), nullable=False)
     queue = relationship('QueueModel', back_populates='items')
     creation_datetime = Column(DateTime, default=datetime.now())
-    status = Column(String, default=ItemStatus.PENDING)
+    status = Column(String, default=AlchemyItemStatus.PENDING)
     retry_count = Column(Integer, default=0)
 
     data = Column(JSON)

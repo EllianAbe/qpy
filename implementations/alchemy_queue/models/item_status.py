@@ -1,6 +1,5 @@
 from abstractions import ItemStatus
-from enum import Enum
 
 
-class ItemStatus(ItemStatus):
+class AlchemyItemStatus(ItemStatus):
     pass

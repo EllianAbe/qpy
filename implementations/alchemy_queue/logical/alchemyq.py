@@ -1,11 +1,11 @@
 from abstractions import AbstractQueue
 from implementations.alchemy_queue.models import QueueModel, ItemModel
-from implementations.alchemy_queue.models.item_model import ItemStatus
+from implementations.alchemy_queue.models.item_model import AlchemyItemStatus
 from ..repository import QueueRepository, ItemRepository
 
 
 class AlchemyQueue(AbstractQueue):
-    def __init__(self, queue_repository: QueueRepository, item_repository: ItemRepository, name: str):
+    def __init__(self, queue_repository: QueueRepository, item_repository: ItemRepository, name: str, max_retry_count=3):
         self._queue_repository = queue_repository
         self._item_repository = item_repository
         self.name = name
@@ -13,8 +13,11 @@ class AlchemyQueue(AbstractQueue):
         self.queue = self._queue_repository.get_by_name(name)
 
         if not self.queue:
-            self.queue = QueueModel(name=self.name)
+            self.queue = QueueModel(
+                name=self.name, max_retry_count=max_retry_count)
             self._queue_repository.add(self.queue)
+
+        self.max_retry_count = self.queue.max_retry_count
 
     def add(self, data):
         item = ItemModel(data=data, queue_id=self.queue.id)

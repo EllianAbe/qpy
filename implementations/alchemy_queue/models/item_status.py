@@ -1,5 +1,5 @@
 from abstractions import ItemStatus
 
 
-class MongoItemStatus(ItemStatus):
+class ItemStatus(ItemStatus):
     pass

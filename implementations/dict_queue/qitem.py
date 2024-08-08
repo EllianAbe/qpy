@@ -1,5 +1,5 @@
 from typing import Literal
-from abstractions import AbstractQueueItem
+from base_classes import AbstractQueueItem
 from datetime import datetime
 
 

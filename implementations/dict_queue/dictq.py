@@ -1,4 +1,4 @@
-from abstractions import AbstractQueue, AbstractQueueItem
+from base_classes import AbstractQueue, AbstractQueueItem
 from typing import Sequence
 
 

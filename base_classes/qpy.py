@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABCMeta
-from abstractions.item import AbstractQueueItem
-from abstractions.item_status import ItemStatus
+from base_classes.item import AbstractQueueItem
+from base_classes.item_status import ItemStatus
+from base_classes.errors import ChangeStatusError
 
 
 class AbstractQueue(metaclass=ABCMeta):
@@ -44,6 +45,10 @@ class AbstractQueue(metaclass=ABCMeta):
     @abstractmethod
     def update_item(self, item_id, status, output_data):
         item = self.get_item_by_id(item_id)
+
+        if ItemStatus.is_final(item._status):
+            raise ChangeStatusError(
+                f'Cannot change status when status is {item._status}')
 
         item.status = status
 

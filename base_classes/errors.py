@@ -1,0 +1,2 @@
+class ChangeStatusError(Exception):
+    pass

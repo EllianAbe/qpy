@@ -1,4 +1,4 @@
-from abstractions import AbstractQueue
+from base_classes import AbstractQueue
 from implementations.alchemy_queue.models import QueueModel, ItemModel
 from implementations.alchemy_queue.models.item_model import AlchemyItemStatus
 from ..repository import QueueRepository, ItemRepository

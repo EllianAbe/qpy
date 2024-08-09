@@ -30,24 +30,31 @@ engine = create_engine('sqlite:///test/alchemy_queue/local.db')
 app.queue = instantiate_queue()
 
 
-@app.get("/")
+@app.get("/mayonoise")
 async def root():
-    return {"message": "QPY Says Hello! Louro quer biscoito!"}
+    return {"message": "QPY Says Hello! QPY says MayonNoise!"}
 
 
-@app.get("/items/", response_model=list[ItemModel])
+@app.get("/queue/items/", response_model=list[ItemModel])
 async def read_items():
     items = app.queue.get_items()
 
     return items
 
 
-@app.post("/items/", response_model=ItemModel)
+@app.post("/queue/item/", response_model=ItemModel)
 async def add_item(data: dict):
     return app.queue.add(data)
 
 
-@app.get("/items/next", response_model=ItemModel)
+@app.get("/queue/items/{item_id}", response_model=ItemModel)
+async def get_item_by_id(item_id):
+    item = app.queue.get_item_by_id(item_id)
+
+    return item
+
+
+@app.get("/queue/next_item", response_model=ItemModel)
 async def get_next_item():
     item = app.queue.get_next()
 
@@ -64,10 +71,9 @@ async def get_queue():
     }
 
 
-@app.post("/items/update", response_model=bool)
-async def update_item(item: ItemModel, status: str):
-    app.queue.update_item(item, status)
-
+@app.put("/queue/items/{item_id}", response_model=bool)
+async def update_item(item_id: int, status: str, output_data: dict = None):
+    return app.queue.update_item(item_id, status, output_data)
 
 # @app.delete("/items/remove")
 # async def remove_item(item: ItemModel):

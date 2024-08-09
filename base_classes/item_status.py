@@ -4,7 +4,8 @@ class ItemStatus():
     ERROR = 'error'
     SUCCESS = 'success'
     REMOVED = 'removed'
+    __final_statuses__ = [ERROR, SUCCESS]
 
     @classmethod
-    def is_final_status(cls, status):
-        return status in [cls.SUCCESS, cls.ERROR]
+    def is_final(cls, status):
+        return status in cls.__final_statuses__

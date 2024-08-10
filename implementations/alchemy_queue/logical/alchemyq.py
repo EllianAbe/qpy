@@ -48,7 +48,8 @@ class AlchemyQueue(AbstractQueue):
     def has_pending_items(self) -> bool:
         return self._item_repository.has_pending_items(self.queue)
 
-    def remove_item(self, item):
+    def remove_item(self, item_id):
+        item = self.get_item_by_id(item_id)
         self._item_repository.remove(item)
 
     def update_item(self, item_id, status, output_data=None):

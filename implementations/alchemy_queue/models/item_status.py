@@ -1,4 +1,4 @@
-from abstractions import ItemStatus
+from base_classes import ItemStatus
 
 
 class AlchemyItemStatus(ItemStatus):

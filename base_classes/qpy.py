@@ -46,7 +46,7 @@ class AbstractQueue(metaclass=ABCMeta):
     def update_item(self, item_id, status, output_data):
         item = self.get_item_by_id(item_id)
 
-        if ItemStatus.is_final(item._status):
+        if ItemStatus.is_final(item.status):
             raise ChangeStatusError(
                 f'Cannot change status when status is {item._status}')
 
@@ -70,7 +70,7 @@ class AbstractQueue(metaclass=ABCMeta):
         # update an item in the queue
 
     @abstractmethod
-    def remove_item(self):
+    def remove_item(self, item_id):
         # remove an item from the queue
         pass
 

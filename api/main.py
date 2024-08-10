@@ -1,33 +1,17 @@
-from fastapi import FastAPI
-from models import ItemModel, QueueModel
-from implementations.alchemy_queue import AlchemyQueue, QueueRepository, ItemRepository
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from implementations.alchemy_queue.base import Base
+from .models import ItemModel, QueueModel
+from fastapi import FastAPI, status, Request
+from .queue_manager import instantiate_queue
 
 app = FastAPI()
 
 
-def instantiate_queue():
-    engine = create_engine('sqlite:///test/alchemy_queue/local.db')
-
-    Session = sessionmaker(bind=engine)
-    session = Session()
-
-    Base.metadata.create_all(engine)
-
-    queue_repository = QueueRepository(session)
-    item_repository = ItemRepository(session)
-
-    queue = AlchemyQueue(queue_repository, item_repository, 'queue1')
-
-    return queue
-
-
-engine = create_engine('sqlite:///test/alchemy_queue/local.db')
-
 # Create a queue object
 app.queue = instantiate_queue()
+
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request, exc: Exception):
+    content = {"detail": "An unexpected error occurred.", "error": str(exc)},
 
 
 @app.get("/mayonoise")
@@ -36,15 +20,28 @@ async def root():
 
 
 @app.get("/queue/items/", response_model=list[ItemModel])
-async def read_items():
-    items = app.queue.get_items()
+async def read_items(request: Request):
+    filters = request.query_params
+
+    filters = {key: value for key, value in filters.items()}
+
+    items = app.queue.get_items(**filters)
+
+    items = [ItemModel(id=item.id, data=item.data,
+                       status=item.status, creation_datetime=item.creation_datetime,
+                       retry_count=item.retry_count, output_data=item.output_data,
+                       queue_id=item.queue_id) for item in items]
+
+    # items = [ItemModel(**item) for item in items]
 
     return items
 
 
-@app.post("/queue/item/", response_model=ItemModel)
+@app.post("/queue/items/", response_model=ItemModel)
 async def add_item(data: dict):
-    return app.queue.add(data)
+    item = app.queue.add(data)
+
+    return item
 
 
 @app.get("/queue/items/{item_id}", response_model=ItemModel)
@@ -73,11 +70,17 @@ async def get_queue():
 
 @app.put("/queue/items/{item_id}", response_model=bool)
 async def update_item(item_id: int, status: str, output_data: dict = None):
-    return app.queue.update_item(item_id, status, output_data)
 
-# @app.delete("/items/remove")
-# async def remove_item(item: ItemModel):
-#     app.queue.remove_item(item)
+    app.queue.update_item(item_id, status, output_data)
+
+    return True
+
+
+@app.delete("/queue/items/{item_id}", response_model=dict)
+async def remove_item(item_id):
+    app.queue.remove_item(item_id)
+
+    return {}
 
 if __name__ == '__main__':
     import uvicorn

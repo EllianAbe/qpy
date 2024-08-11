@@ -7,4 +7,17 @@ QPY allows developers to store transactional tasks, persist their data (both inp
 
 You can choose between a ready-to-use option or create your own queue using the provided base classes.
 
-Deploy any queue using REST APIs based on FastAPI, allowing easy integrations with applications, workflows...
+Deploying any queue using REST APIs based on FastAPI, ~~provide easy integrations with applications, workflows and services ~~ you can add and consume queue items anywhere you need.
+
+## Instalation
+### self-developed
+use the default instalation to implement your own queue.
+
+`pip install qpy`
+
+### ready-to-use
+to use a ready-to-use queue:
+```
+pip install qpy[mongo]
+pip install qpy[alchemy]
+```

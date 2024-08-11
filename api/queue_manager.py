@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-def instantiate_queue():
+def instantiate_queue() -> AlchemyQueue:
 
     engine = create_engine('sqlite:///test/alchemy_queue/local.db')
 

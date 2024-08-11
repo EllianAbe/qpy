@@ -1,5 +1,5 @@
 from .models import ItemModel, QueueModel
-from fastapi import FastAPI, status, Request
+from fastapi import FastAPI, Request
 from .queue_manager import instantiate_queue
 
 app = FastAPI()

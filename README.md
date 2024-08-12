@@ -1,7 +1,3 @@
-
-
-Based on the provided context, I'll rewrite the README.md file to better reflect the content and structure of the package.
-
 # QPY
 Queue management for Python.
 

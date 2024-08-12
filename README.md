@@ -10,7 +10,7 @@ QPY provides task queues for software and automation. It allows developers to st
 * Status control for tasks
 * Auto-retry mechanism for robustness
 * Support for multiple queue implementations (e.g., MongoDB, SQLAlchemy)
-
+* Distributed architecture: Each queue can have multiple producers and multiple consumers, which can run anywhere, allowing for scalable and fault-tolerant distributed systems.
 ## Installation
 
 To install QPY, use pip:

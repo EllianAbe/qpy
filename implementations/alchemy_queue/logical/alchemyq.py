@@ -2,6 +2,7 @@ from base_classes import AbstractQueue
 from implementations.alchemy_queue.models import QueueModel, ItemModel
 from implementations.alchemy_queue.models.item_model import AlchemyItemStatus
 from ..repository import QueueRepository, ItemRepository
+from sqlalchemy.orm import Session
 
 
 class AlchemyQueue(AbstractQueue):
@@ -18,6 +19,10 @@ class AlchemyQueue(AbstractQueue):
             self._queue_repository.add(self.queue)
 
         self.max_retry_count = self.queue.max_retry_count
+
+    @classmethod
+    def from_session(cls, session: Session, name: str, max_retry_count=3):
+        return cls(QueueRepository(session), ItemRepository(session), name, max_retry_count)
 
     def add(self, data):
         item = ItemModel(data=data, queue_id=self.queue.id)

@@ -1,6 +1,6 @@
 from pymongo.database import Database
 from typing import Sequence
-from base_classes import AbstractQueue, AbstractQueueItem
+from base_classes import AbstractQueue
 from .item import MongoQueueItem
 from .item_status import MongoItemStatus
 

@@ -66,8 +66,9 @@ if queue.is_empty():
 ```
 You can also check if the queue has pending items using the `has_pending_items` method:
 ```python
-if queue.has_pending_items():
-    print("The queue has pending items")
+while queue.has_pending_items():
+    item = queue.get_next()
+    process(item)
 ```
 Note that this is just a basic example, and you can use the QPY library in more complex scenarios as well.
 

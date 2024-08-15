@@ -16,3 +16,4 @@ class ItemModel(Base):
 
     data = Column(JSON)
     output_data = Column(JSON)
+    eligible_date = Column(DateTime)

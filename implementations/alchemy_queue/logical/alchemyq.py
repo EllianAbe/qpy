@@ -1,3 +1,4 @@
+from datetime import datetime
 from base_classes import AbstractQueue
 from implementations.alchemy_queue.models import QueueModel, ItemModel
 from implementations.alchemy_queue.models.item_model import AlchemyItemStatus
@@ -24,8 +25,9 @@ class AlchemyQueue(AbstractQueue):
     def from_session(cls, session: Session, name: str, max_retry_count=3):
         return cls(QueueRepository(session), ItemRepository(session), name, max_retry_count)
 
-    def add(self, data):
-        item = ItemModel(data=data, queue_id=self.queue.id)
+    def add(self, data, eligible_date=datetime.now()):
+        item = ItemModel(data=data, queue_id=self.queue.id,
+                         eligible_date=eligible_date)
         self._item_repository.add(item)
 
         return item
@@ -50,8 +52,8 @@ class AlchemyQueue(AbstractQueue):
     def is_empty(self) -> bool:
         return not self.get_items()
 
-    def has_pending_items(self) -> bool:
-        return self._item_repository.has_pending_items(self.queue)
+    def has_pending_items(self, ignore_eligibility: bool = False) -> bool:
+        return self._item_repository.has_pending_items(self.queue, ignore_eligibility)
 
     def remove_item(self, item_id):
         item = self.get_item_by_id(item_id)

@@ -48,7 +48,7 @@ class TestAlchemyQueue(unittest.TestCase):
 
         before = len(self.queue.get_items(status=AlchemyItemStatus.REMOVED))
 
-        self.queue.remove_item(self.queue.get_next())
+        self.queue.remove_item(self.queue.get_next().id)
 
         after = len(self.queue.get_items(status=AlchemyItemStatus.REMOVED))
 

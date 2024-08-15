@@ -1,6 +1,7 @@
 from typing import Any
 from ..models import ItemModel
 from ..models.item_model import AlchemyItemStatus
+from datetime import datetime
 
 
 class ItemRepository():
@@ -30,8 +31,10 @@ class ItemRepository():
         return self.session.query(ItemModel).filter_by(**filters).all()
 
     def get_next_by_queue(self, queue):
-        item = self.session.query(ItemModel).filter_by(
-            queue_id=queue.id, status=AlchemyItemStatus.PENDING).first()
+        item = self.session.query(ItemModel).filter(
+            ItemModel.eligible_date <= datetime.now(),
+            ItemModel.queue_id == queue.id,
+            ItemModel.status == AlchemyItemStatus.PENDING).first()
 
         if item:
             item.status = AlchemyItemStatus.PROCESSING
@@ -42,5 +45,11 @@ class ItemRepository():
     def get_item_by_id(self, item_id):
         return self.session.query(ItemModel).filter_by(id=item_id).first()
 
-    def has_pending_items(self, queue):
-        return self.session.query(ItemModel).filter_by(queue_id=queue.id, status=AlchemyItemStatus.PENDING).first() is not None
+    def has_pending_items(self, queue, ignore_eligibility: bool = False):
+        if ignore_eligibility:
+            return self.session.query(ItemModel).filter(queue_id=queue.id, status=AlchemyItemStatus.PENDING).first() is not None
+
+        return self.session.query(ItemModel).filter(
+            ItemModel.eligible_date <= datetime.now(),
+            ItemModel.queue_id == queue.id,
+            ItemModel.status == AlchemyItemStatus.PENDING).first() is not None

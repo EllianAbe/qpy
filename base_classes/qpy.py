@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABCMeta
+from datetime import datetime
 from base_classes.item import AbstractQueueItem
 from base_classes.item_status import ItemStatus
 from base_classes.errors import ChangeStatusError
@@ -12,7 +13,7 @@ class AbstractQueue(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def add(self, item: dict) -> AbstractQueueItem:
+    def add(self, item: dict, eligible_date: datetime) -> AbstractQueueItem:
         # add an item to the queues
         pass
 
@@ -30,6 +31,10 @@ class AbstractQueue(metaclass=ABCMeta):
     @abstractmethod
     def get_items(self) -> list[AbstractQueueItem]:
         # get items from the queue, specify filter rules
+        pass
+
+    def has_pending_items(self, ignore_eligibility: bool = False) -> bool:
+        # check if there are pending items in the queue
         pass
 
     @abstractmethod

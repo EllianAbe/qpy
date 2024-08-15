@@ -64,6 +64,14 @@ class AlchemyQueue(AbstractQueue):
 
         self._item_repository.update()
 
+    def postpone_item(self, item_id, eligible_date: datetime):
+        item = self.get_item_by_id(item_id)
+
+        item.eligible_date = eligible_date
+        item.status = AlchemyItemStatus.PENDING
+
+        self._item_repository.update()
+
     def dispatcher(self, func):
         def wrapper(*args, **kwargs):
             data = func(*args, **kwargs)

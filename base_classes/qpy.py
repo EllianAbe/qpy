@@ -75,6 +75,11 @@ class AbstractQueue(metaclass=ABCMeta):
         # update an item in the queue
 
     @abstractmethod
+    def postpone_item(self, item_id, eligible_date: datetime):
+        # postpone an item
+        pass
+
+    @abstractmethod
     def remove_item(self, item_id):
         # remove an item from the queue
         pass

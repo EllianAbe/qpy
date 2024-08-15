@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from implementations.alchemy_queue import AlchemyQueue, QueueRepository, ItemRepository
 from implementations.alchemy_queue.models.item_model import AlchemyItemStatus
 from implementations.alchemy_queue.base import Base
+from datetime import datetime, timedelta
 
 
 class TestAlchemyQueue(unittest.TestCase):
@@ -66,6 +67,18 @@ class TestAlchemyQueue(unittest.TestCase):
             status=AlchemyItemStatus.SUCCESS))
 
         self.assertGreater(sucess_after, sucess_before)
+
+    def test_postpone_item(self):
+        item = self.queue.add({'a': 1, 'b': 2})
+
+        eligible_date = datetime.now() + timedelta(days=3)
+
+        self.queue.postpone_item(item.id, eligible_date)
+
+        item = self.queue.get_item_by_id(item.id)
+
+        self.assertEqual(item.eligible_date == eligible_date,
+                         item.status == AlchemyItemStatus.PENDING)
 
     def test_with_decorator(self):
         @self.queue.dispatcher

@@ -51,7 +51,7 @@ item = queue.get_next()
 print(item)
 
 # Update the item
-queue.update_item(item.id, 'status', 'new_status')
+queue.update_item(item.id, 'failed')
 
 # Check if the queue is empty
 if queue.is_empty():

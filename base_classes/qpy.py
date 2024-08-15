@@ -33,6 +33,10 @@ class AbstractQueue(metaclass=ABCMeta):
         # get items from the queue, specify filter rules
         pass
 
+    def has_pending_items(self, ignore_eligibility: bool = False) -> bool:
+        # check if there are pending items in the queue
+        pass
+
     @abstractmethod
     def get_item_by_id(self, item_id) -> AbstractQueueItem:
         # get an item from the queue by id

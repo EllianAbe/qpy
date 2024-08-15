@@ -42,7 +42,7 @@ class ItemRepository():
 
         return item
 
-    def get_item_by_id(self, item_id):
+    def get_item_by_id(self, item_id) -> ItemModel:
         return self.session.query(ItemModel).filter_by(id=item_id).first()
 
     def has_pending_items(self, queue, ignore_eligibility: bool = False):

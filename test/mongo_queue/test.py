@@ -3,6 +3,7 @@
 import unittest
 from pymongo import MongoClient
 from implementations.mongo_queue import MongoQueue, MongoItemStatus
+from datetime import datetime, timedelta
 
 
 class TestMongoQueue(unittest.TestCase):
@@ -58,6 +59,20 @@ class TestMongoQueue(unittest.TestCase):
             {'status': MongoItemStatus.SUCCESS}))
 
         self.assertGreater(sucess_after, sucess_before)
+
+    def test_postpone_item(self):
+        item = self.queue.add({'a': 1, 'b': 2})
+
+        eligible_date = datetime.now() + timedelta(days=3)
+        timedelta(milliseconds=1)
+        self.queue.postpone_item(item.id, eligible_date)
+
+        item = self.queue.get_item_by_id(item.id)
+
+        self.assertEqual(item.eligible_date.replace(microsecond=0), eligible_date.replace(microsecond=0),
+                         'eligible date not updated by postpone')
+        self.assertEqual(item.status, MongoItemStatus.PENDING,
+                         'status not equal pending after postpone')
 
     def test_with_decorator(self):
         @ self.queue.dispatcher

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pymongo.database import Database
 from typing import Sequence
 from base_classes import AbstractQueue
@@ -70,6 +71,17 @@ class MongoQueue(AbstractQueue):
 
         self._collection.update_one(
             {'_id': item.id}, {'$set': item.to_dict()})
+
+    def postpone_item(self, item_id, eligible_date: datetime):
+        item = self.get_item_by_id(item_id)
+
+        item.eligible_date = eligible_date
+        item.status = MongoItemStatus.PENDING
+
+        self._collection.update_one(
+            {'_id': item.id},
+            {'$set': item.to_dict()}
+        )
 
     def dispatcher(self, func):
         def wrapper(*args, **kwargs):

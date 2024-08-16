@@ -77,11 +77,13 @@ class TestAlchemyQueue(unittest.TestCase):
 
         item = self.queue.get_item_by_id(item.id)
 
-        self.assertEqual(item.eligible_date == eligible_date,
-                         item.status == AlchemyItemStatus.PENDING)
+        self.assertEqual(item.eligible_date, eligible_date,
+                         'eligible date not updated by postpone')
+        self.assertEqual(item.status, AlchemyItemStatus.PENDING,
+                         'status not equal pending after postpone')
 
     def test_with_decorator(self):
-        @self.queue.dispatcher
+        @ self.queue.dispatcher
         def new_item():
             return {'a': 1, 'b': 2}
 

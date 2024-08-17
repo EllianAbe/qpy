@@ -1,6 +1,7 @@
-from .models import ItemModel, QueueModel
+from datetime import datetime
+from api.models import ItemModel, QueueModel
 from fastapi import FastAPI, Request
-from .queue_manager import instantiate_queue
+from api.queue_manager import instantiate_queue
 
 app = FastAPI()
 
@@ -27,10 +28,7 @@ async def read_items(request: Request):
 
     items = app.queue.get_items(**filters)
 
-    items = [ItemModel(id=item.id, data=item.data,
-                       status=item.status, creation_datetime=item.creation_datetime,
-                       retry_count=item.retry_count, output_data=item.output_data,
-                       queue_id=item.queue_id) for item in items]
+    items = [ItemModel(**item.__dict__) for item in items]
 
     # items = [ItemModel(**item) for item in items]
 
@@ -72,6 +70,13 @@ async def get_queue():
 async def update_item(item_id: int, status: str, output_data: dict = None):
 
     app.queue.update_item(item_id, status, output_data)
+
+    return True
+
+
+@app.patch("/queue/items/{item_id}", response_model=bool)
+async def postpone_item(item_id: int, eligible_date: datetime):
+    app.queue.postpone_item(item_id, eligible_date)
 
     return True
 

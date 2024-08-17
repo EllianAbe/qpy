@@ -19,3 +19,4 @@ class ItemModel(BaseModel):
     retry_count: int
     data: dict | None
     output_data: dict | None
+    eligible_date: datetime

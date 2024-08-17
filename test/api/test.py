@@ -1,4 +1,5 @@
 
+from datetime import datetime, timedelta
 import unittest
 from fastapi.testclient import TestClient
 from api import app
@@ -53,6 +54,22 @@ class TestAPI(unittest.TestCase):
             '/queue/items/?status=success').json())
 
         self.assertGreater(sucess_after, sucess_before)
+
+    def test_postpone_item(self):
+        resp = self.client.post('/queue/items', json={'a': 1, 'b': 2})
+
+        item = resp.json()
+
+        eligible_date = datetime.now() + timedelta(days=3)
+        self.client.patch(
+            f'/queue/items/{item["id"]}?eligible_date={eligible_date.isoformat()}')
+
+        item = self.client.get(f'/queue/items/{item["id"]}').json()
+
+        self.assertEqual(datetime.fromisoformat(item['eligible_date']), eligible_date,
+                         'eligible date not updated by postpone')
+        self.assertEqual(item['status'], 'pending',
+                         'status not equal pending after postpone')
 
 
 if __name__ == '__main__':

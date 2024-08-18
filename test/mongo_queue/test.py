@@ -2,7 +2,7 @@
 
 import unittest
 from pymongo import MongoClient
-from implementations.mongo_queue import MongoQueue, MongoItemStatus
+from src.implementations.mongo_queue import MongoQueue, MongoItemStatus
 from datetime import datetime, timedelta
 
 

@@ -1,8 +1,8 @@
 from abc import abstractmethod, ABCMeta
 from datetime import datetime
-from base_classes.item import AbstractQueueItem
-from base_classes.item_status import ItemStatus
-from base_classes.errors import ChangeStatusError
+from src.base_classes.item import AbstractQueueItem
+from src.base_classes.item_status import ItemStatus
+from src.base_classes.errors import ChangeStatusError
 
 
 class AbstractQueue(metaclass=ABCMeta):
@@ -92,7 +92,7 @@ class AbstractQueue(metaclass=ABCMeta):
         def wrapper(*args, **kwargs):
             item = func(*args, **kwargs)
 
-            self.add(item)
+            item = self.add(item)
 
             return item
 

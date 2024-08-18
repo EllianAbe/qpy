@@ -1,7 +1,7 @@
 
 import unittest
 from fastapi.testclient import TestClient
-from api import app
+from src.api import app
 
 
 class TestAPI(unittest.TestCase):

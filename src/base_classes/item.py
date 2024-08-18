@@ -10,7 +10,7 @@ class AbstractQueueItem(ABC):
                  creation_date: datetime = datetime.now(), retry_count: int = 0, id=None,
                  eligible_date: datetime = datetime.now()):
         self.data = data
-        self._status = status
+        self.status = status
         self.output_data = output_data
         self.creation_date = creation_date
         self.retry_count = retry_count

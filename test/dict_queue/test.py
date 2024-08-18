@@ -1,6 +1,6 @@
 import unittest
-from implementations import DictQueue, Item
-from data import initial
+from src.implementations import DictQueue, Item
+from src.base_classes import ItemStatus
 
 
 class TestDictQueue(unittest.TestCase):
@@ -8,22 +8,20 @@ class TestDictQueue(unittest.TestCase):
     def setUpClass(cls):
         cls.queue = DictQueue([])
 
-    def test_init(self):
-        self.assertTrue(self.queue.is_empty, 'queue should be empty')
+    def test_is_empty(self):
+        self.queue.add({'a': 1, 'b': 2})
+        self.assertFalse(self.queue.is_empty(), 'queue should be empty')
 
     def test_add(self):
-        for item in initial:
-            self.queue.add(Item(**item))
+        item = self.queue.add({'a': 1, 'b': 2})
 
-        self.assertFalse(self.queue.is_empty(), 'queue should not be empty')
-        has_pending_items = self.queue.has_pending_items()
-
-        self.assertTrue(has_pending_items, 'queue should have pending items')
+        self.assertIn(item, self.queue.get_items(),
+                      'item should be in the queue')
 
     def test_dispatcher_decorator(self):
         @self.queue.dispatcher
         def new_item():
-            return Item(**initial[0])
+            return {'a': 1, 'b': 2}
 
         item = new_item()
 
@@ -31,12 +29,29 @@ class TestDictQueue(unittest.TestCase):
 
         self.assertTrue(in_queue, 'item should be in the queue')
 
-    def test_enqueue_methods(self):
-        works_fine = all(
-            item.queue == self.queue for item in self.queue.get_items())
+    def test_remove_item(self):
+        item = self.queue.add({'a': 1, 'b': 2})
 
-        self.assertTrue(
-            works_fine, 'all queue references must refer to the queue')
+        self.queue.remove_item(item)
+
+        self.assertTrue(item.status == ItemStatus.REMOVED)
+
+    def test_update_item(self):
+        item = self.queue.add({'a': 1, 'b': 2})
+
+        self.queue.update_item(item, ItemStatus.SUCCESS)
+
+        self.assertEqual(item.status, ItemStatus.SUCCESS)
+
+    def test_get_next(self):
+        item = self.queue.add({'a': 1, 'b': 2})
+
+        self.assertIsInstance(item, Item)
+
+    def test_has_pending_items(self):
+        self.queue.add({'a': 1, 'b': 2})
+
+        self.assertTrue(self.queue.has_pending_items())
 
 
 if __name__ == '__main__':

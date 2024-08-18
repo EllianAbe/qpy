@@ -2,9 +2,9 @@
 import unittest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from implementations.alchemy_queue import AlchemyQueue, QueueRepository, ItemRepository
-from implementations.alchemy_queue.models.item_model import AlchemyItemStatus
-from implementations.alchemy_queue.base import Base
+from src.implementations.alchemy_queue import AlchemyQueue, QueueRepository, ItemRepository
+from src.implementations.alchemy_queue.models.item_model import AlchemyItemStatus
+from src.implementations.alchemy_queue.base import Base
 from datetime import datetime, timedelta
 
 

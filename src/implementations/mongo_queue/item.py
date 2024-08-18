@@ -1,4 +1,4 @@
-from base_classes import AbstractQueueItem
+from src.base_classes import AbstractQueueItem
 from datetime import datetime
 from .item_status import MongoItemStatus
 

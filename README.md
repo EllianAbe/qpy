@@ -35,7 +35,7 @@ To create your own QPY queue implementation, consider the following steps:
 
 Here's an example of using the Mongo Queue library to manage a queue:
 ```python
-from implementations.mongo_queue import MongoQueue
+from src.implementations.mongo_queue import MongoQueue
 
 client = MongoClient('localhost', 27017)
 db = client.get_database('test')

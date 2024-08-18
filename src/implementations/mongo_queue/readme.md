@@ -19,7 +19,7 @@ pip install mongo-queue
 
 To create a queue, you need to import the `MongoQueue` class and create an instance of it, passing in a MongoDB database and a queue name:
 ```python
-from implementations.mongo_queue import MongoQueue
+from src.implementations.mongo_queue import MongoQueue
 
 client = MongoClient('localhost', 27017)
 db = client.get_database('test')
@@ -61,7 +61,7 @@ if queue.has_pending_items():
 
 Here is an example of how you can use the Mongo Queue library to manage a queue:
 ```python
-from implementations.mongo_queue import MongoQueue
+from src.implementations.mongo_queue import MongoQueue
 
 client = MongoClient('localhost', 27017)
 db = client.get_database('test')

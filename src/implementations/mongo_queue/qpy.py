@@ -1,7 +1,7 @@
 from datetime import datetime
 from pymongo.database import Database
 from typing import Sequence
-from base_classes import AbstractQueue
+from src.base_classes import AbstractQueue
 from .item import MongoQueueItem
 from .item_status import MongoItemStatus
 

@@ -19,7 +19,7 @@ pip install qpy[alchemy]
 
 To create a queue, you need to import the `AlchemyQueue` class and create an instance of it, passing in a SQLAlchemy session and a queue name:
 ```python
-from implementations.alchemy_queue import AlchemyQueue
+from src.implementations.alchemy_queue import AlchemyQueue
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -59,7 +59,7 @@ if queue.is_empty():
 
 Here is an example of how you can use the Alchemy Queue library to manage a queue:
 ```python
-from implementations.alchemy_queue import AlchemyQueue
+from src.implementations.alchemy_queue import AlchemyQueue
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 

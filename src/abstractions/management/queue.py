@@ -1,11 +1,8 @@
 from abc import abstractmethod, ABCMeta
 from datetime import datetime
-from src.base_classes.item import AbstractQueueItem
-from src.base_classes.item_status import ItemStatus
-from src.base_classes.errors import ChangeStatusError
 
 
-class AbstractQueue(metaclass=ABCMeta):
+class Queue(metaclass=ABCMeta):
 
     @abstractmethod
     def __init__(self, definition: dict | None):
@@ -13,23 +10,23 @@ class AbstractQueue(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def add(self, item: dict, eligible_date: datetime) -> AbstractQueueItem:
+    def add(self, item: dict, eligible_date: datetime):
         # add an item to the queues
         pass
 
     @abstractmethod
-    def enqueue_item(self, item: AbstractQueueItem):
+    def enqueue_item(self, item):
         item.enqueue(self)
 
     @abstractmethod
-    def get_next(self) -> AbstractQueueItem:
+    def get_next(self):
         # get the next item in the queue
         # return None if the queue is empty
         # do not forget to change the status of the item
         pass
 
     @abstractmethod
-    def get_items(self) -> list[AbstractQueueItem]:
+    def get_items(self):
         # get items from the queue, specify filter rules
         pass
 
@@ -38,7 +35,7 @@ class AbstractQueue(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_item_by_id(self, item_id) -> AbstractQueueItem:
+    def get_item_by_id(self, item_id):
         # get an item from the queue by id
         pass
 

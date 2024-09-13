@@ -1,5 +1,7 @@
+from .headers import MessageHeaders
+
+
 class Message():
-    def __init__(self, content, metadata, properties):
+    def __init__(self, content: dict, headers: MessageHeaders):
         self.content = content
-        self.metadata = metadata
-        self.properties = properties
+        self.headers = headers

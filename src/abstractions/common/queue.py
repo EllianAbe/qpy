@@ -1,4 +1,4 @@
-from src.abstractions.message import Message
+from src.abstractions.common.message import Message
 
 
 class Queue:

@@ -1,4 +1,4 @@
-from ..message.message import Message
+from ..common.message import Message
 from ..management.exchange import Exchange
 
 

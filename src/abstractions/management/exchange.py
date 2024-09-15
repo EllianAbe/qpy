@@ -1,4 +1,3 @@
-from src.abstractions.message import Message
 
 
 class Exchange:

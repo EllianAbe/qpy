@@ -22,6 +22,14 @@ class MessageHeaders:
         self.routing_key = routing_key
         self.message_id = message_id
 
+    def __getitem__(self, key):
+        """Returns the value of a specific header."""
+        return self.get_header(key)
+
+    def __setkey__(self, key, value):
+        """Sets the value of a specific header."""
+        self.set_header(key, value)
+
     def set_header(self, key, value):
         """Dynamically sets any additional header."""
         setattr(self, key, value)
